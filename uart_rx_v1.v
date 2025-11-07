@@ -81,13 +81,13 @@ begin
     if(i_rst) begin
         ro_user_rx_valid <= 'd0;
     end
-    else if(r_cnt == (P_UART_DATA_WIDTH + P_UART_START_WIDTH + P_UART_CHECK_WIDTH -1) && P_UART_CHECK == 0) begin
+    else if(r_cnt == (P_UART_DATA_WIDTH + P_UART_START_WIDTH + P_UART_STOP_WIDTH -1) && P_UART_CHECK == 0) begin
         ro_user_rx_valid <= 'd1;
     end
-    else if(r_cnt == (P_UART_DATA_WIDTH + P_UART_START_WIDTH + P_UART_CHECK_WIDTH - 1) && P_UART_CHECK == 1 && i_uart_rx == r_check_2r) begin
+    else if(r_cnt == (P_UART_DATA_WIDTH + P_UART_START_WIDTH + P_UART_CHECK_WIDTH + P_UART_STOP_WIDTH - 1) && P_UART_CHECK == 1 && i_uart_rx == r_check_2r) begin
         ro_user_rx_valid <= 'd1;
     end
-    else if(r_cnt == (P_UART_DATA_WIDTH + P_UART_START_WIDTH + P_UART_CHECK_WIDTH - 1) && P_UART_CHECK == 2 && i_uart_rx == !r_check_2r) begin
+    else if(r_cnt == (P_UART_DATA_WIDTH + P_UART_START_WIDTH + P_UART_CHECK_WIDTH + P_UART_STOP_WIDTH - 1) && P_UART_CHECK == 2 && i_uart_rx == !r_check_2r) begin
         ro_user_rx_valid <= 'd1;
     end
     else begin

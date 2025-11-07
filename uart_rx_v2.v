@@ -10,13 +10,13 @@ module uart_rx #(
     parameter P_UART_CHECK_WIDTH    = 1         ,
     parameter P_UART_CHECK          = 1
 )(
-    input i_clk                                         ,
-    input i_rst                                         ,
+    input                               i_clk           ,
+    input                               i_rst           ,
 
-    input i_uart_rx                                     ,
+    input                               i_uart_rx       ,
 
     output [P_UART_DATA_WIDTH - 1 : 0]  o_user_rx_data  ,
-    output o_user_rx_valid
+    output                              o_user_rx_valid
 );
 
 /***************function**************/
@@ -88,13 +88,13 @@ begin
     if(i_rst) begin
         ro_user_rx_valid <= 'd0;
     end
-    else if(r_cnt == (P_UART_DATA_WIDTH + P_UART_START_WIDTH + P_UART_CHECK_WIDTH -1) && P_UART_CHECK == 0) begin
+    else if(r_cnt == (P_UART_DATA_WIDTH + P_UART_START_WIDTH + P_UART_STOP_WIDTH - 1) && P_UART_CHECK == 0) begin
         ro_user_rx_valid <= 'd1;
     end
-    else if(r_cnt == (P_UART_DATA_WIDTH + P_UART_START_WIDTH + P_UART_CHECK_WIDTH - 1) && P_UART_CHECK == 1 && r_uart_rx[1] == r_check) begin
+    else if(r_cnt == (P_UART_DATA_WIDTH + P_UART_START_WIDTH + P_UART_CHECK_WIDTH + P_UART_STOP_WIDTH - 1) && P_UART_CHECK == 1 && r_uart_rx[1] == r_check) begin
         ro_user_rx_valid <= 'd1;
     end
-    else if(r_cnt == (P_UART_DATA_WIDTH + P_UART_START_WIDTH + P_UART_CHECK_WIDTH - 1) && P_UART_CHECK == 2 && r_uart_rx[1] == !r_check) begin//在停止位拉高valid
+    else if(r_cnt == (P_UART_DATA_WIDTH + P_UART_START_WIDTH + P_UART_CHECK_WIDTH + P_UART_STOP_WIDTH - 1) && P_UART_CHECK == 2 && r_uart_rx[1] == !r_check) begin//在停止位拉高valid
         ro_user_rx_valid <= 'd1;
     end
     else begin
